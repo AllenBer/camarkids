@@ -92,51 +92,61 @@
     }
 
     function cargarVideoYouTube() {
-      const contenedor = document.createElement('div');
-      contenedor.id = 'video-container';
-      contenedor.style.position = 'relative';
-      contenedor.style.width = '100%';
-      contenedor.style.height = '360px';
+  const contenedor = document.createElement('div');
+  contenedor.id = 'video-container';
+  contenedor.style.position = 'relative';
+  contenedor.style.width = '100%';
+  contenedor.style.height = '360px';
+  contenedor.style.overflow = 'hidden';
 
-      const preview = document.createElement('img');
-      preview.src = 'https://img.youtube.com/vi/IInzcKgF5Fw/hqdefault.jpg';
-      preview.alt = 'Vista previa del video';
-      preview.style.width = '100%';
-      preview.style.height = '100%';
-      preview.style.objectFit = 'cover';
+  // Imagen previa (miniatura del video)
+  const videoId = 'IInzcKgF5Fw'; // ← tu ID de YouTube
+  const videoIdBase64 = btoa(videoId); // convierte a base64
+  const preview = document.createElement('img');
+  preview.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  preview.alt = 'Vista previa';
+  preview.style.width = '100%';
+  preview.style.height = '100%';
+  preview.style.objectFit = 'cover';
+  contenedor.appendChild(preview);
 
-      const botonPlay = document.createElement('button');
-      botonPlay.textContent = '▶ Reproducir';
-      botonPlay.style.position = 'absolute';
-      botonPlay.style.top = '50%';
-      botonPlay.style.left = '50%';
-      botonPlay.style.transform = 'translate(-50%, -50%)';
-      botonPlay.style.fontSize = '24px';
-      botonPlay.style.padding = '10px 20px';
-      botonPlay.style.backgroundColor = 'red';
-      botonPlay.style.color = 'white';
-      botonPlay.style.border = 'none';
-      botonPlay.style.borderRadius = '8px';
-      botonPlay.style.cursor = 'pointer';
-      botonPlay.style.zIndex = '10';
+  // Botón de reproducción
+  const botonPlay = document.createElement('button');
+  botonPlay.textContent = '▶ Reproducir';
+  botonPlay.style.position = 'absolute';
+  botonPlay.style.top = '50%';
+  botonPlay.style.left = '50%';
+  botonPlay.style.transform = 'translate(-50%, -50%)';
+  botonPlay.style.fontSize = '24px';
+  botonPlay.style.padding = '10px 20px';
+  botonPlay.style.backgroundColor = 'red';
+  botonPlay.style.color = 'white';
+  botonPlay.style.border = 'none';
+  botonPlay.style.borderRadius = '8px';
+  botonPlay.style.cursor = 'pointer';
+  botonPlay.style.zIndex = '10';
+  contenedor.appendChild(botonPlay);
 
-      botonPlay.addEventListener('click', () => {
-        const videoId = atob('SUluemNLZ0Y1Rnd'); // base64 de "IInzcKgF5Fw"
-        const youtubeLive = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&controls=1`;
+  // Acción al hacer clic: reemplazar imagen + botón por el iframe
+  botonPlay.addEventListener('click', () => {
+    const decodedId = atob(videoIdBase64);
+    const youtubeURL = `https://www.youtube.com/embed/${decodedId}?autoplay=1&modestbranding=1&rel=0&controls=1`;
 
-        contenedor.innerHTML = `
-          <div style="position: relative; width: 100%; height: 360px;">
-            <iframe src="${youtubeLive}" 
-                    frameborder="0" 
-                    allow="autoplay; encrypted-media" 
-                    allowfullscreen
-                    style="width: 100%; height: 100%;"></iframe>
-          </div>`;
-      });
+    contenedor.innerHTML = `
+      <div style="position: relative; width: 100%; height: 360px;">
+        <iframe 
+          src="${youtubeURL}" 
+          frameborder="0" 
+          allow="autoplay; encrypted-media" 
+          allowfullscreen 
+          style="width: 100%; height: 100%;">
+        </iframe>
+      </div>`;
+  });
 
-      contenedor.appendChild(preview);
-      contenedor.appendChild(botonPlay);
-      return contenedor;
+  return contenedor;
+}
+
     }
 
     async function cargarVideoPreferido() {
